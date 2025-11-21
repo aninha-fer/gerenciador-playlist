@@ -1,0 +1,266 @@
+:root{
+    --bg:#121212;
+    --card:#181818;
+    --muted:#b3b3b3;
+    --accent:#1db954;
+    --glass: rgba(255,255,255,0.04);
+    font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+html,body{
+    height:100%;
+    margin:0;
+    background:linear-gradient(180deg,#0f0f0f 0%, #141414 100%);
+    color:#fff;
+}
+
+.app{
+    display:grid;
+    grid-template-columns:1fr 340px;
+    grid-template-rows:64px 1fr;
+    gap:20px;
+    height:100vh;
+    padding:20px;box-sizing:border-box;
+}
+header{
+    grid-column:1/-1;
+    height:64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:40px;
+    height:40px;
+    background:var(--accent);
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color:#000
+}
+
+.search{
+    flex:1;
+    max-width:720px;
+    background:var(--glass);
+    padding:8px 12px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+
+.search input{
+    flex:1;
+    background:transparent;
+    border:0;
+    outline:none;
+    color:#fff;
+    font-size:14px
+}
+
+.user{
+    display:flex;
+    align-items:center;
+    gap:12px
+}
+
+main{
+    grid-row:2 / 3;
+    padding:12px;
+    overflow:auto;
+}
+
+.hero{
+    display:flex;
+    align-items:flex-end;
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.hero-card{
+    flex:1;
+    background:linear-gradient(180deg,#232323,#151515);
+    padding:18px;
+    border-radius:12px;
+    display:flex;
+    gap:16px;
+    align-items:center
+};
+
+.hero-card img{
+    width:120px;
+    height:120px;
+    border-radius:8px;
+    object-fit:cover
+}
+
+.hero-card .meta{
+    flex:1;
+}
+
+.meta h2{
+    margin:0 0 8px 0;
+    font-size:20px;
+}
+
+.meta p{
+    margin:0;
+    color:var(--muted);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:14px;
+}
+
+.card{
+    background:var(--card);
+    padding:12px;
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.card img{
+    width:100%;
+    height:120px;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+.card .title{
+    font-weight:600;
+    font-size:14px;
+}
+
+.card .subtitle{
+    color:var(--muted);
+    font-size:13px;
+}
+
+aside.queue{
+    grid-row:2 / 3;
+    padding:12px;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-left:1px solid rgba(255,255,255,0.03);
+    position:relative;
+}
+
+.queue-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+
+.queue-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow:auto;
+    height:calc(100% - 56px);
+    padding-right:8px;
+}
+
+.track{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.track img{
+    width:48px;
+    height:48px;
+    border-radius:6px;
+    object-fit:cover;
+}
+
+.track .info{
+    flex:1;
+}
+
+.track .info .t{
+    font-size:14px;
+}
+
+.track .info .a{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.mini-player{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    width:320px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
+    border-radius:12px;
+    padding:10px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    box-shadow:0 6px 24px rgba(0,0,0,0.6);
+}
+
+.mini-player .cover{
+    width:56px;
+    height:56px;
+    border-radius:6px;
+    object-fit:cover;
+}
+
+.mini-player .controls{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.mini-player .title{
+    font-weight:600;
+}
+
+.mini-player .progress{
+    height:6px;
+    background:rgba(255,255,255,0.08);
+    border-radius:6px;
+    margin-top:8px;
+    overflow:hidden;
+}
+
+.progress > i{
+    display:block;
+    height:100%;
+    width:40%;
+    background:var(--accent);
+}
+
+@media (max-width:980px){
+    .app{
+        grid-template-columns:1fr;
+        grid-template-rows:64px 1fr;
+    
+    }
+
+    aside.queue{
+        display:none;
+    }
+
+    .mini-player{
+        right:12px;
+        left:12px;
+        width:auto;
+    }
+}
