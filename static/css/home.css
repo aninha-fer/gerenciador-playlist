@@ -151,11 +151,11 @@ main{
     font-size:13px;
 }
 
-aside.queue{
+aside.recommendations{
     grid-row:2 / 3;
-    padding:12px;
+    padding:16px;
     background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-    border-left:1px solid rgba(255,255,255,0.03);
+    border-left:1px solid rgba(255,255,255,0.05);
     position:relative;
 }
 
@@ -181,6 +181,19 @@ aside.queue{
     align-items:center;
 }
 
+.playlist-track:hover{
+    background:rgba(255,255,255,0.05) !important;
+}
+
+.playlist-track:hover button{
+    opacity:1;
+}
+
+.playlist-track button{
+    opacity:0;
+    transition:opacity 0.2s;
+}
+
 .track img{
     width:48px;
     height:48px;
@@ -203,8 +216,9 @@ aside.queue{
 
 .mini-player{
     position:fixed;
-    right:20px;
+    left:50%;
     bottom:20px;
+    transform:translateX(-50%);
     width:320px;
     background:linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
     border-radius:12px;
@@ -251,10 +265,9 @@ aside.queue{
     .app{
         grid-template-columns:1fr;
         grid-template-rows:64px 1fr;
-    
     }
 
-    aside.queue{
+    aside.recommendations{
         display:none;
     }
 
