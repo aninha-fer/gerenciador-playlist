@@ -68,33 +68,99 @@
             <div class="meta">
               <h2>Sua Playlist</h2>
               <p>
-                {{ playlist|length }} músicas selecionadas • Duração total estimada
+                {{ playlist|length }} músicas selecionadas • Duração total
+                estimada
               </p>
             </div>
           </div>
         </section>
 
         <section>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 16px;
+            "
+          >
             <h3 style="margin: 0">Suas Músicas</h3>
-            <button style="background: var(--accent); border: 0; padding: 8px 16px; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer">▶ Reproduzir Tudo</button>
+            <button
+              style="
+                background: var(--accent);
+                border: 0;
+                padding: 8px 16px;
+                border-radius: 6px;
+                color: #000;
+                font-weight: 600;
+                cursor: pointer;
+              "
+            >
+              ▶ Reproduzir Tudo
+            </button>
           </div>
-          
+
           <div style="display: flex; flex-direction: column; gap: 8px">
             {% for musica in playlist %}
-            <div class="playlist-track" style="display: flex; align-items: center; padding: 12px; background: var(--card); border-radius: 8px; cursor: pointer; transition: background 0.2s">
-              <div style="width: 24px; text-align: center; color: var(--muted); font-size: 14px; margin-right: 12px">{{ loop.index }}</div>
+            <div
+              class="playlist-track"
+              style="
+                display: flex;
+                align-items: center;
+                padding: 12px;
+                background: var(--card);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.2s;
+              "
+            >
+              <div
+                style="
+                  width: 24px;
+                  text-align: center;
+                  color: var(--muted);
+                  font-size: 14px;
+                  margin-right: 12px;
+                "
+              >
+                {{ loop.index }}
+              </div>
               <img
                 src="https://picsum.photos/60/60?random={{ loop.index }}"
                 alt="{{ musica.nome }}"
-                style="width: 60px; height: 60px; border-radius: 6px; margin-right: 16px"
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 6px;
+                  margin-right: 16px;
+                "
               />
               <div style="flex: 1">
-                <div style="font-weight: 600; margin-bottom: 4px">{{ musica.nome }}</div>
-                <div style="color: var(--muted); font-size: 13px">{{ musica.cantor }} • {{ musica.genero }}</div>
+                <div style="font-weight: 600; margin-bottom: 4px">
+                  {{ musica.nome }}
+                </div>
+                <div style="color: var(--muted); font-size: 13px">
+                  {{ musica.cantor }} • {{ musica.genero }}
+                </div>
               </div>
-              <div style="color: var(--muted); font-size: 13px; margin-right: 16px">{{ musica.duracao }}</div>
-              <button style="background: transparent; border: 0; color: var(--muted); cursor: pointer; padding: 8px; border-radius: 4px" title="Remover da playlist">✕</button>
+              <div
+                style="color: var(--muted); font-size: 13px; margin-right: 16px"
+              >
+                {{ musica.duracao }}
+              </div>
+              <button
+                style="
+                  background: transparent;
+                  border: 0;
+                  color: var(--muted);
+                  cursor: pointer;
+                  padding: 8px;
+                  border-radius: 4px;
+                "
+                title="Remover da playlist"
+              >
+                ✕
+              </button>
             </div>
             {% endfor %}
           </div>
@@ -104,17 +170,44 @@
       <aside class="recommendations" aria-label="Músicas Recomendadas">
         <div class="queue-header">
           <strong>Recomendadas</strong>
-          <small style="color: var(--muted)">{{ recomendadas|length }} músicas</small>
+          <small style="color: var(--muted)"
+            >{{ recomendadas|length }} músicas</small
+          >
         </div>
         <div class="queue-list">
           {% for musica in recomendadas %}
-          <div class="track" style="padding: 8px; border-radius: 6px; cursor: pointer; transition: background 0.2s" onmouseover="this.style.background='var(--glass)'" onmouseout="this.style.background='transparent'">
-            <img src="https://picsum.photos/48/48?random={{ loop.index + 10 }}" alt="{{ musica.nome }}" />
+          <div
+            class="track"
+            style="
+              padding: 8px;
+              border-radius: 6px;
+              cursor: pointer;
+              transition: background 0.2s;
+            "
+            onmouseover="this.style.background='var(--glass)'"
+            onmouseout="this.style.background='transparent'"
+          >
+            <img
+              src="https://picsum.photos/48/48?random={{ loop.index + 10 }}"
+              alt="{{ musica.nome }}"
+            />
             <div class="info">
               <div class="t">{{ musica.nome }}</div>
               <div class="a">{{ musica.cantor }}</div>
             </div>
-            <button style="background: transparent; border: 0; color: var(--accent); cursor: pointer; padding: 4px; font-size: 16px" title="Adicionar à playlist">+</button>
+            <button
+              style="
+                background: transparent;
+                border: 0;
+                color: var(--accent);
+                cursor: pointer;
+                padding: 4px;
+                font-size: 16px;
+              "
+              title="Adicionar à playlist"
+            >
+              +
+            </button>
           </div>
           {% endfor %}
         </div>
@@ -122,16 +215,67 @@
     </div>
 
     <div class="mini-player" aria-hidden="false">
-      <img class="cover" src="https://picsum.photos/56/56?random=1" alt="{{ playlist[0].nome if playlist else 'Nenhuma música' }}" />
+      <img
+        class="cover"
+        src="https://picsum.photos/56/56?random=1"
+        alt="{{ playlist[0].nome if playlist else 'Nenhuma música' }}"
+      />
       <div class="controls">
-        <div class="title">{{ playlist[0].nome if playlist else 'Nenhuma música tocando' }} — {{ playlist[0].cantor if playlist else '' }}</div>
-        <div style="display: flex; gap: 8px; margin-top: 6px; align-items: center">
-          <button style="background: transparent; border: 0; color: var(--muted); cursor: pointer">⏮</button>
-          <button style="background: var(--accent); border: 0; padding: 8px 12px; border-radius: 50%; color: #000; font-weight: 700; cursor: pointer">⏸</button>
-          <button style="background: transparent; border: 0; color: var(--muted); cursor: pointer">⏭</button>
-          <button style="background: transparent; border: 0; color: var(--muted); cursor: pointer; margin-left: 8px">🔀</button>
+        <div class="title">
+          {{ playlist[0].nome if playlist else 'Nenhuma música tocando' }} — {{
+          playlist[0].cantor if playlist else '' }}
         </div>
-        <div class="progress" aria-hidden="true"><i style="width: 35%"></i></div>
+        <div
+          style="display: flex; gap: 8px; margin-top: 6px; align-items: center"
+        >
+          <button
+            style="
+              background: transparent;
+              border: 0;
+              color: var(--muted);
+              cursor: pointer;
+            "
+          >
+            ⏮
+          </button>
+          <button
+            style="
+              background: var(--accent);
+              border: 0;
+              padding: 8px 12px;
+              border-radius: 50%;
+              color: #000;
+              font-weight: 700;
+              cursor: pointer;
+            "
+          >
+            ⏸
+          </button>
+          <button
+            style="
+              background: transparent;
+              border: 0;
+              color: var(--muted);
+              cursor: pointer;
+            "
+          >
+            ⏭
+          </button>
+          <button
+            style="
+              background: transparent;
+              border: 0;
+              color: var(--muted);
+              cursor: pointer;
+              margin-left: 8px;
+            "
+          >
+            🔀
+          </button>
+        </div>
+        <div class="progress" aria-hidden="true">
+          <i style="width: 35%"></i>
+        </div>
       </div>
     </div>
   </body>
