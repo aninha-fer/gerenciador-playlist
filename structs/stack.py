@@ -44,3 +44,6 @@ class Stack:
             current_node = current_node.next
 
         return array
+
+    def is_empty(self):
+        return self.size == 0

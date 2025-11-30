@@ -22,7 +22,7 @@
           </div>
         </div>
 
-        <div class="search" role="search">
+        <form class="search" role="search" id="search-form" style="display: flex; align-items: center; gap: 8px">
           <svg
             width="16"
             height="16"
@@ -40,10 +40,11 @@
           </svg>
           <input
             type="search"
+            id="search-input"
             placeholder="Buscar músicas, artistas, playlists..."
             aria-label="Buscar"
           />
-        </div>
+        </form>
 
         <div class="user">
         </div>
@@ -55,9 +56,8 @@
             <img src="https://picsum.photos/200/200?random=1" alt="Capa" />
             <div class="meta">
               <h2>Sua Playlist</h2>
-              <p>
-                {{ playlist|length }} músicas selecionadas • Duração total
-                estimada
+              <p id="playlist-info">
+                {{ playlist|length }} músicas na fila
               </p>
             </div>
           </div>
@@ -65,14 +65,15 @@
 
         <section>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
-            <h3 style="margin: 0">Suas Músicas ({{ playlist|length }})</h3>
+            <h3 style="margin: 0">Fila de Reprodução (<span id="queue-count">{{ playlist|length }}</span>)</h3>
             <button style="background: var(--accent); border: 0; padding: 8px 16px; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer">▶ Reproduzir</button>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 8px">
+          <div id="queue-container" style="display: flex; flex-direction: column; gap: 8px">
             {% for musica in playlist %}
             <div
               class="playlist-track"
+              data-musica-id="{{ loop.index0 }}"
               style="
                 display: flex;
                 align-items: center;
@@ -117,19 +118,6 @@
               >
                 {{ musica.duracao }}
               </div>
-              <button
-                style="
-                  background: transparent;
-                  border: 0;
-                  color: var(--muted);
-                  cursor: pointer;
-                  padding: 8px;
-                  border-radius: 4px;
-                "
-                title="Remover da playlist"
-              >
-                ✕
-              </button>
             </div>
             {% endfor %}
           </div>
@@ -143,7 +131,7 @@
             >{{ recomendadas|length }} músicas</small
           >
         </div>
-        <div class="queue-list" style="max-height: 40%; overflow-y: auto; margin-bottom: 16px">
+        <div class="queue-list" style="max-height: 100%; overflow-y: auto;">
           {% for musica in recomendadas %}
           <div
             class="track"
@@ -164,33 +152,11 @@
               <div class="t">{{ musica.nome }}</div>
               <div class="a">{{ musica.cantor }}</div>
             </div>
-            <a href="{{ url_for('adicionar_musica', musica_id=loop.index + 9) }}" style="background: transparent; border: 0; color: var(--accent); cursor: pointer; padding: 4px; font-size: 16px; text-decoration: none" title="Adicionar à fila">+</a>
-          </div>
-          {% endfor %}
-        </div>
-        
-        <div class="queue-header">
-          <strong>Fila</strong>
-          <small style="color: var(--muted)">{{ fila|length }} músicas</small>
-        </div>
-        <div class="queue-list">
-          {% for musica in fila %}
-          <div class="track" style="padding: 8px; border-radius: 6px">
-            <img src="https://picsum.photos/48/48?random={{ loop.index + 50 }}" alt="{{ musica.nome }}" />
-            <div class="info">
-              <div class="t">{{ musica.nome }}</div>
-              <div class="a">{{ musica.cantor }}</div>
-            </div>
-            <button
-              style="
-                background: transparent;
-                border: 0;
-                color: var(--accent);
-                cursor: pointer;
-                padding: 4px;
-                font-size: 16px;
-              "
-              title="Adicionar à playlist"
+            <button 
+              class="add-btn"
+              data-musica-id="{{ loop.index0 + 10 }}"
+              style="background: transparent; border: 0; color: var(--accent); cursor: pointer; padding: 4px; font-size: 16px; text-decoration: none; font-weight: 700"
+              title="Adicionar à fila"
             >
               +
             </button>
@@ -215,12 +181,14 @@
           style="display: flex; gap: 8px; margin-top: 6px; align-items: center"
         >
           <button
+            id="back-btn"
             style="
               background: transparent;
               border: 0;
               color: var(--muted);
               cursor: pointer;
             "
+            title="Música anterior"
           >
             ⏮
           </button>
@@ -238,12 +206,14 @@
             ⏸
           </button>
           <button
+            id="skip-btn"
             style="
               background: transparent;
               border: 0;
               color: var(--muted);
               cursor: pointer;
             "
+            title="Próxima música"
           >
             ⏭
           </button>
@@ -264,5 +234,67 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // Buscar música via Hash Table
+      document.getElementById('search-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const termo = document.getElementById('search-input').value.trim();
+        
+        if (termo.length > 0) {
+          try {
+            const response = await fetch(`/buscar/${encodeURIComponent(termo)}`);
+            if (response.ok) {
+              location.reload();
+            }
+          } catch (error) {
+            console.error('Erro ao buscar música:', error);
+          }
+        }
+      });
+
+      // Voltar para música anterior
+      document.getElementById('back-btn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('/voltar', { method: 'POST' });
+          if (response.ok) {
+            location.reload();
+          }
+        } catch (error) {
+          console.error('Erro ao voltar música:', error);
+        }
+      });
+
+      // Pular música
+      document.getElementById('skip-btn').addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('/pular', { method: 'POST' });
+          if (response.ok) {
+            location.reload();
+          }
+        } catch (error) {
+          console.error('Erro ao pular música:', error);
+        }
+      });
+
+      // Adicionar música à fila
+      document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const musicaId = btn.getAttribute('data-musica-id');
+          
+          try {
+            const response = await fetch(`/adicionar/${musicaId}`);
+            if (response.ok) {
+              location.reload();
+            }
+          } catch (error) {
+            console.error('Erro ao adicionar música:', error);
+          }
+        });
+      });
+    </script>
   </body>
 </html>
