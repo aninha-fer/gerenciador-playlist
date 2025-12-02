@@ -66,7 +66,10 @@
         <section>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
             <h3 style="margin: 0">Fila de Reprodução (<span id="queue-count">{{ playlist|length }}</span>)</h3>
-            <button style="background: var(--accent); border: 0; padding: 8px 16px; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer">▶ Reproduzir</button>
+            <div style="display: flex; gap: 8px">
+              <button id="shuffle-btn" style="background: var(--card); border: 1px solid var(--muted); padding: 8px 16px; border-radius: 6px; color: var(--text); font-weight: 600; cursor: pointer" title="Embaralhar fila">🔀 Shuffle</button>
+              <button style="background: var(--accent); border: 0; padding: 8px 16px; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer">▶ Reproduzir</button>
+            </div>
           </div>
 
           <div id="queue-container" style="display: flex; flex-direction: column; gap: 8px">
@@ -218,6 +221,7 @@
             ⏭
           </button>
           <button
+            id="mini-shuffle-btn"
             style="
               background: transparent;
               border: 0;
@@ -225,6 +229,7 @@
               cursor: pointer;
               margin-left: 8px;
             "
+            title="Embaralhar"
           >
             🔀
           </button>
@@ -236,12 +241,16 @@
     </div>
 
     <script>
-      // Buscar música via Hash Table
+      // Buscar música
       document.getElementById('search-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const termo = document.getElementById('search-input').value.trim();
         
         if (termo.length > 0) {
+          // Visual feedback
+          const searchInput = document.getElementById('search-input');
+          searchInput.style.opacity = '0.6';
+          
           try {
             const response = await fetch(`/buscar/${encodeURIComponent(termo)}`);
             if (response.ok) {
@@ -249,6 +258,7 @@
             }
           } catch (error) {
             console.error('Erro ao buscar música:', error);
+            searchInput.style.opacity = '1';
           }
         }
       });
@@ -295,6 +305,22 @@
           }
         });
       });
+
+      // Shuffle playlist
+      const shuffleHandler = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('/shuffle', { method: 'POST' });
+          if (response.ok) {
+            location.reload();
+          }
+        } catch (error) {
+          console.error('Erro ao embaralhar:', error);
+        }
+      };
+      
+      document.getElementById('shuffle-btn').addEventListener('click', shuffleHandler);
+      document.getElementById('mini-shuffle-btn').addEventListener('click', shuffleHandler);
     </script>
   </body>
 </html>

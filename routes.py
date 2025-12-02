@@ -4,7 +4,18 @@ from musicas import musicas_para_projeto
 from structs.hash_table import HashTable
 from structs.stack import Stack
 from structs.queue import Queue
-import traceback 
+import os
+import traceback
+import random
+
+# Import search functions
+exec(open(os.path.join('search', 'linear-search.py')).read())
+exec(open(os.path.join('search', 'binary-search.py')).read())
+from search.advanced_search import advanced_search
+
+# Import sort functions  
+exec(open(os.path.join('sort', 'bubble-sort.py')).read())
+from sort.shuffle_sort import fisher_yates_shuffle 
 
 # Inicializa a Hash Table com índice de músicas
 musica_hash_table = HashTable(size=100)
@@ -62,51 +73,32 @@ def test():
 
 @app.route("/buscar/<termo>")
 def buscar_musica(termo):
-    """Busca rápida usando Hash Table - O(1)"""
+    """Busca usando algoritmos de busca implementados"""
     global music_queue
-    termo = termo.lower().strip()
-    print(f"\n=== BUSCAR MÚSICA ===")
-    print(f"Termo buscado: '{termo}'")
+    termo = termo.strip()
     
-    # Busca exata na Hash Table usando .get()
-    resultado = musica_hash_table.get(termo)
-    
+    # Primeiro tenta busca exata na Hash Table
+    resultado = musica_hash_table.get(termo.lower())
     if resultado:
         indice, musica = resultado
-        
-        # Converte para dict se for objeto
-        if isinstance(musica, dict):
-            musica_dict = musica
-        else:
-            musica_dict = {
-                'nome': musica.nome,
-                'cantor': musica.cantor,
-                'genero': musica.genero,
-                'duracao': musica.duracao
-            }
-        
-        print(f"✓ Música encontrada: {musica_dict['nome']} (índice: {indice})")
+        musica_dict = musica if isinstance(musica, dict) else {
+            'nome': musica.nome, 'cantor': musica.cantor,
+            'genero': musica.genero, 'duracao': musica.duracao
+        }
         music_queue.enqueue(musica_dict)
-    else:
-        # Se não encontrar exato, busca parcial (O(n) fallback)
-        print(f"✗ Busca exata não encontrou. Tentando busca parcial...")
-        encontrou = False
-        for i, musica in enumerate(musicas_para_projeto):
-            nome_musica = musica['nome'].lower() if isinstance(musica, dict) else musica.nome.lower()
-            if termo in nome_musica:
-                musica_dict = musica if isinstance(musica, dict) else {
-                    'nome': musica.nome,
-                    'cantor': musica.cantor,
-                    'genero': musica.genero,
-                    'duracao': musica.duracao
-                }
-                print(f"✓ Música encontrada (busca parcial): {musica_dict['nome']}")
-                music_queue.enqueue(musica_dict)
-                encontrou = True
-                break
-        
-        if not encontrou:
-            print(f"✗ Nenhuma música encontrada com '{termo}'")
+        return redirect(url_for('home'))
+    
+    # Usa busca avançada (nome, artista, gênero)
+    indices = advanced_search(musicas_para_projeto, termo)
+    
+    # Adiciona as primeiras 3 músicas encontradas
+    for i, indice in enumerate(indices[:3]):
+        musica = musicas_para_projeto[indice]
+        musica_dict = musica if isinstance(musica, dict) else {
+            'nome': musica.nome, 'cantor': musica.cantor,
+            'genero': musica.genero, 'duracao': musica.duracao
+        }
+        music_queue.enqueue(musica_dict)
     
     return redirect(url_for('home'))
 
@@ -199,5 +191,26 @@ def voltar_musica():
     except Exception as e:
         # AQUI ESTÁ O SEGREDO: Em vez de Tela de Erro 500, ele imprime o erro no terminal
         print("🔴 ERRO GRAVE NO /VOLTAR:")
-        print(traceback.format_exc()) # Isso mostra exatamente a linha que quebrou
+        print(traceback.format_exc())
         return "Erro interno no servidor (veja o terminal)", 500
+
+@app.route("/shuffle", methods=['POST'])
+def shuffle_playlist():
+    """Embaralha a fila usando algoritmo de ordenação"""
+    global music_queue
+    
+    if music_queue.is_empty():
+        return redirect(url_for('home'))
+    
+    # Converte fila para array
+    items = music_queue.to_array()
+    
+    # Embaralha usando Fisher-Yates shuffle
+    shuffled_items = fisher_yates_shuffle(items)
+    
+    # Reconstrói a fila
+    music_queue.clear()
+    for item in shuffled_items:
+        music_queue.enqueue(item)
+    
+    return redirect(url_for('home'))
