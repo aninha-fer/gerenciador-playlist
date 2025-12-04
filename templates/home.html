@@ -14,34 +14,30 @@
       <header>
         <div class="brand">
           <div class="logo">M</div>
-          <div>
-            <div style="font-weight: 700">MusicApp</div>
-            <div style="font-size: 12px; color: var(--muted)">
-              Sua música, sempre
-            </div>
+          <div class="brand-info">
+            <div class="brand-name">MusicApp</div>
+            <div class="brand-tagline">Sua música, sempre</div>
           </div>
         </div>
 
-        <form class="search" role="search" id="search-form" style="display: flex; align-items: center; gap: 8px">
+        <form class="search" role="search" id="search-form">
           <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
+            width="16" height="16" viewBox="0 0 24 24" fill="none"
             aria-hidden
           >
             <path
-              d="M21 21l-4.35-4.35"
+              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
               stroke="currentColor"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
             />
+            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           <input
             type="search"
             id="search-input"
-            placeholder="Buscar músicas, artistas, playlists..."
+            placeholder="Buscar músicas, artistas, gêneros..."
             aria-label="Buscar"
           />
         </form>
@@ -64,58 +60,40 @@
         </section>
 
         <section>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
-            <h3 style="margin: 0">Fila de Reprodução (<span id="queue-count">{{ playlist|length }}</span>)</h3>
-            <button style="background: var(--accent); border: 0; padding: 8px 16px; border-radius: 6px; color: #000; font-weight: 600; cursor: pointer">▶ Reproduzir</button>
+          <div class="section-header">
+            <h3>Fila de Reprodução (<span id="queue-count">{{ playlist|length }}</span>)</h3>
+            <div class="button-group">
+              <button id="shuffle-btn" title="Embaralhar fila">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.7751 9.79734C16.4792 10.0873 16.4744 10.5621 16.7643 10.8579C17.0543 11.1538 17.5291 11.1586 17.8249 10.8687L16.7751 9.79734ZM19.5249 9.20266C19.8208 8.91274 19.8256 8.43789 19.5357 8.14205C19.2457 7.84622 18.7709 7.84142 18.4751 8.13134L19.5249 9.20266ZM18.4749 9.2025C18.7706 9.49251 19.2455 9.48786 19.5355 9.19211C19.8255 8.89636 19.8209 8.42151 19.5251 8.1315L18.4749 9.2025ZM17.8251 6.4645C17.5294 6.17449 17.0545 6.17914 16.7645 6.47489C16.4745 6.77064 16.4791 7.24549 16.7749 7.5355L17.8251 6.4645ZM18.9735 9.41653C19.3875 9.43115 19.7349 9.10742 19.7495 8.69346C19.7641 8.27951 19.4404 7.93208 19.0265 7.91747L18.9735 9.41653ZM5 14.583C4.58579 14.583 4.25 14.9188 4.25 15.333C4.25 15.7472 4.58579 16.083 5 16.083V14.583ZM17.8249 13.1313C17.5291 12.8414 17.0543 12.8462 16.7643 13.1421C16.4744 13.4379 16.4792 13.9127 16.7751 14.2027L17.8249 13.1313ZM18.4751 15.8687C18.7709 16.1586 19.2457 16.1538 19.5357 15.8579C19.8256 15.5621 19.8208 15.0873 19.5249 14.7973L18.4751 15.8687ZM19.5251 15.8685C19.8209 15.5785 19.8255 15.1036 19.5355 14.8079C19.2455 14.5121 18.7706 14.5075 18.4749 14.7975L19.5251 15.8685ZM16.7749 16.4645C16.4791 16.7545 16.4745 17.2294 16.7645 17.5251C17.0545 17.8209 17.5294 17.8255 17.8251 17.5355L16.7749 16.4645ZM19.0265 16.0825C19.4404 16.0679 19.7641 15.7205 19.7495 15.3065C19.7349 14.8926 19.3875 14.5689 18.9735 14.5835L19.0265 16.0825ZM5 7.917C4.58579 7.917 4.25 8.25279 4.25 8.667C4.25 9.08121 4.58579 9.417 5 9.417V7.917ZM17.8249 10.8687L19.5249 9.20266L18.4751 8.13134L16.7751 9.79734L17.8249 10.8687ZM19.5251 8.1315L17.8251 6.4645L16.7749 7.5355L18.4749 9.2025L19.5251 8.1315ZM19.0265 7.91747C16.0086 7.81093 13.9537 8.17906 12.4743 8.84951C10.9717 9.53046 10.1311 10.4927 9.49687 11.4203C9.21681 11.83 8.89561 12.3629 8.67258 12.7002C8.41581 13.0886 8.16957 13.414 7.8797 13.6833C7.33706 14.1873 6.54721 14.583 5 14.583V16.083C6.84679 16.083 8.02744 15.5933 8.90055 14.7823C9.31855 14.394 9.6415 13.9545 9.92383 13.5275C10.2399 13.0495 10.4277 12.7166 10.7351 12.2669C11.2759 11.476 11.9243 10.7456 13.0935 10.2158C14.2858 9.67544 16.0854 9.31457 18.9735 9.41653L19.0265 7.91747ZM16.7751 14.2027L18.4751 15.8687L19.5249 14.7973L17.8249 13.1313L16.7751 14.2027ZM18.4749 14.7975L16.7749 16.4645L17.8251 17.5355L19.5251 15.8685L18.4749 14.7975ZM18.9735 14.5835C16.0854 14.6854 14.2858 14.3246 13.0935 13.7842C11.9243 13.2544 11.2759 12.524 10.7351 11.7331C10.4277 11.2834 10.2399 10.9505 9.92383 10.4725C9.6415 10.0455 9.31855 9.60595 8.90055 9.21769C8.02744 8.4067 6.84679 7.917 5 7.917V9.417C6.54721 9.417 7.33706 9.81268 7.8797 10.3167C8.16957 10.586 8.41581 10.9114 8.67258 11.2998C8.89561 11.6371 9.21681 12.17 9.49687 12.5797C10.1311 13.5073 10.9717 14.4695 12.4743 15.1505C13.9537 15.8209 16.0086 16.1891 19.0265 16.0825L18.9735 14.5835Z" fill="#ffffff"></path> </g></svg>
+                Shuffle
+              </button>
+              <button class="btn-play">▶ Reproduzir</button>
+            </div>
           </div>
 
-          <div id="queue-container" style="display: flex; flex-direction: column; gap: 8px">
+          <div id="queue-container">
             {% for musica in playlist %}
             <div
               class="playlist-track"
               data-musica-id="{{ loop.index0 }}"
-              style="
-                display: flex;
-                align-items: center;
-                padding: 12px;
-                background: var(--card);
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.2s;
-              "
             >
-              <div
-                style="
-                  width: 24px;
-                  text-align: center;
-                  color: var(--muted);
-                  font-size: 14px;
-                  margin-right: 12px;
-                "
-              >
+              <div class="track-number">
                 {{ loop.index }}
               </div>
               <img
                 src="https://picsum.photos/60/60?random={{ loop.index }}"
                 alt="{{ musica.nome }}"
-                style="
-                  width: 60px;
-                  height: 60px;
-                  border-radius: 6px;
-                  margin-right: 16px;
-                "
+                class="track-cover"
               />
-              <div style="flex: 1">
-                <div style="font-weight: 600; margin-bottom: 4px">
+              <div class="track-details">
+                <div class="name">
                   {{ musica.nome }}
                 </div>
-                <div style="color: var(--muted); font-size: 13px">
+                <div class="meta">
                   {{ musica.cantor }} • {{ musica.genero }}
                 </div>
               </div>
-              <div
-                style="color: var(--muted); font-size: 13px; margin-right: 16px"
-              >
+              <div class="track-duration">
                 {{ musica.duracao }}
               </div>
             </div>
@@ -127,23 +105,11 @@
       <aside class="recommendations" aria-label="Músicas Recomendadas">
         <div class="queue-header">
           <strong>Recomendadas</strong>
-          <small style="color: var(--muted)"
-            >{{ recomendadas|length }} músicas</small
-          >
+          <small>{{ recomendadas|length }} músicas</small>
         </div>
-        <div class="queue-list" style="max-height: 100%; overflow-y: auto;">
+        <div class="queue-list">
           {% for musica in recomendadas %}
-          <div
-            class="track"
-            style="
-              padding: 8px;
-              border-radius: 6px;
-              cursor: pointer;
-              transition: background 0.2s;
-            "
-            onmouseover="this.style.background='var(--glass)'"
-            onmouseout="this.style.background='transparent'"
-          >
+          <div class="track">
             <img
               src="https://picsum.photos/48/48?random={{ loop.index + 10 }}"
               alt="{{ musica.nome }}"
@@ -155,7 +121,6 @@
             <button 
               class="add-btn"
               data-musica-id="{{ loop.index0 + 10 }}"
-              style="background: transparent; border: 0; color: var(--accent); cursor: pointer; padding: 4px; font-size: 16px; text-decoration: none; font-weight: 700"
               title="Adicionar à fila"
             >
               +
@@ -177,71 +142,39 @@
           {{ playlist[0].nome if playlist else 'Nenhuma música tocando' }} — {{
           playlist[0].cantor if playlist else '' }}
         </div>
-        <div
-          style="display: flex; gap: 8px; margin-top: 6px; align-items: center"
-        >
-          <button
-            id="back-btn"
-            style="
-              background: transparent;
-              border: 0;
-              color: var(--muted);
-              cursor: pointer;
-            "
-            title="Música anterior"
-          >
+        <div class="button-group">
+          <button id="back-btn" title="Música anterior">
             ⏮
           </button>
-          <button
-            style="
-              background: var(--accent);
-              border: 0;
-              padding: 8px 12px;
-              border-radius: 50%;
-              color: #000;
-              font-weight: 700;
-              cursor: pointer;
-            "
-          >
+          <button class="btn-play">
             ⏸
           </button>
-          <button
-            id="skip-btn"
-            style="
-              background: transparent;
-              border: 0;
-              color: var(--muted);
-              cursor: pointer;
-            "
-            title="Próxima música"
-          >
+          <button id="skip-btn" title="Próxima música">
             ⏭
           </button>
           <button
-            style="
-              background: transparent;
-              border: 0;
-              color: var(--muted);
-              cursor: pointer;
-              margin-left: 8px;
-            "
+            id="mini-shuffle-btn"
+            title="Embaralhar"
           >
-            🔀
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.7751 9.79734C16.4792 10.0873 16.4744 10.5621 16.7643 10.8579C17.0543 11.1538 17.5291 11.1586 17.8249 10.8687L16.7751 9.79734ZM19.5249 9.20266C19.8208 8.91274 19.8256 8.43789 19.5357 8.14205C19.2457 7.84622 18.7709 7.84142 18.4751 8.13134L19.5249 9.20266ZM18.4749 9.2025C18.7706 9.49251 19.2455 9.48786 19.5355 9.19211C19.8255 8.89636 19.8209 8.42151 19.5251 8.1315L18.4749 9.2025ZM17.8251 6.4645C17.5294 6.17449 17.0545 6.17914 16.7645 6.47489C16.4745 6.77064 16.4791 7.24549 16.7749 7.5355L17.8251 6.4645ZM18.9735 9.41653C19.3875 9.43115 19.7349 9.10742 19.7495 8.69346C19.7641 8.27951 19.4404 7.93208 19.0265 7.91747L18.9735 9.41653ZM5 14.583C4.58579 14.583 4.25 14.9188 4.25 15.333C4.25 15.7472 4.58579 16.083 5 16.083V14.583ZM17.8249 13.1313C17.5291 12.8414 17.0543 12.8462 16.7643 13.1421C16.4744 13.4379 16.4792 13.9127 16.7751 14.2027L17.8249 13.1313ZM18.4751 15.8687C18.7709 16.1586 19.2457 16.1538 19.5357 15.8579C19.8256 15.5621 19.8208 15.0873 19.5249 14.7973L18.4751 15.8687ZM19.5251 15.8685C19.8209 15.5785 19.8255 15.1036 19.5355 14.8079C19.2455 14.5121 18.7706 14.5075 18.4749 14.7975L19.5251 15.8685ZM16.7749 16.4645C16.4791 16.7545 16.4745 17.2294 16.7645 17.5251C17.0545 17.8209 17.5294 17.8255 17.8251 17.5355L16.7749 16.4645ZM19.0265 16.0825C19.4404 16.0679 19.7641 15.7205 19.7495 15.3065C19.7349 14.8926 19.3875 14.5689 18.9735 14.5835L19.0265 16.0825ZM5 7.917C4.58579 7.917 4.25 8.25279 4.25 8.667C4.25 9.08121 4.58579 9.417 5 9.417V7.917ZM17.8249 10.8687L19.5249 9.20266L18.4751 8.13134L16.7751 9.79734L17.8249 10.8687ZM19.5251 8.1315L17.8251 6.4645L16.7749 7.5355L18.4749 9.2025L19.5251 8.1315ZM19.0265 7.91747C16.0086 7.81093 13.9537 8.17906 12.4743 8.84951C10.9717 9.53046 10.1311 10.4927 9.49687 11.4203C9.21681 11.83 8.89561 12.3629 8.67258 12.7002C8.41581 13.0886 8.16957 13.414 7.8797 13.6833C7.33706 14.1873 6.54721 14.583 5 14.583V16.083C6.84679 16.083 8.02744 15.5933 8.90055 14.7823C9.31855 14.394 9.6415 13.9545 9.92383 13.5275C10.2399 13.0495 10.4277 12.7166 10.7351 12.2669C11.2759 11.476 11.9243 10.7456 13.0935 10.2158C14.2858 9.67544 16.0854 9.31457 18.9735 9.41653L19.0265 7.91747ZM16.7751 14.2027L18.4751 15.8687L19.5249 14.7973L17.8249 13.1313L16.7751 14.2027ZM18.4749 14.7975L16.7749 16.4645L17.8251 17.5355L19.5251 15.8685L18.4749 14.7975ZM18.9735 14.5835C16.0854 14.6854 14.2858 14.3246 13.0935 13.7842C11.9243 13.2544 11.2759 12.524 10.7351 11.7331C10.4277 11.2834 10.2399 10.9505 9.92383 10.4725C9.6415 10.0455 9.31855 9.60595 8.90055 9.21769C8.02744 8.4067 6.84679 7.917 5 7.917V9.417C6.54721 9.417 7.33706 9.81268 7.8797 10.3167C8.16957 10.586 8.41581 10.9114 8.67258 11.2998C8.89561 11.6371 9.21681 12.17 9.49687 12.5797C10.1311 13.5073 10.9717 14.4695 12.4743 15.1505C13.9537 15.8209 16.0086 16.1891 19.0265 16.0825L18.9735 14.5835Z" fill="#ffffff"></path> </g></svg>
           </button>
         </div>
         <div class="progress" aria-hidden="true">
-          <i style="width: 35%"></i>
+          <i></i>
         </div>
       </div>
     </div>
 
     <script>
-      // Buscar música via Hash Table
+      // Buscar música
       document.getElementById('search-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const termo = document.getElementById('search-input').value.trim();
         
         if (termo.length > 0) {
+          const searchInput = document.getElementById('search-input');
+          searchInput.style.opacity = '0.6';
+          
           try {
             const response = await fetch(`/buscar/${encodeURIComponent(termo)}`);
             if (response.ok) {
@@ -249,6 +182,7 @@
             }
           } catch (error) {
             console.error('Erro ao buscar música:', error);
+            searchInput.style.opacity = '1';
           }
         }
       });
@@ -295,6 +229,22 @@
           }
         });
       });
+
+      // Shuffle playlist
+      const shuffleHandler = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('/shuffle', { method: 'POST' });
+          if (response.ok) {
+            location.reload();
+          }
+        } catch (error) {
+          console.error('Erro ao embaralhar:', error);
+        }
+      };
+      
+      document.getElementById('shuffle-btn').addEventListener('click', shuffleHandler);
+      document.getElementById('mini-shuffle-btn').addEventListener('click', shuffleHandler);
     </script>
   </body>
 </html>
