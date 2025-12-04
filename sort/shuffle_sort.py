@@ -5,7 +5,7 @@ import os
 current_dir = os.path.dirname(__file__)
 
 # Execute the bubble sort file
-exec(open(os.path.join(current_dir, 'bubble-sort.py')).read())
+from sort.bubble_sort import bubble_sort
 
 def shuffle_with_sort(array):
     """

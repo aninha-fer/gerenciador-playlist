@@ -4,23 +4,14 @@ from musicas import musicas_para_projeto
 from structs.hash_table import HashTable
 from structs.stack import Stack
 from structs.queue import Queue
-import os
 import traceback
-import random
-
-# Import search functions
-exec(open(os.path.join('search', 'linear-search.py')).read())
-exec(open(os.path.join('search', 'binary-search.py')).read())
+from search.linear_search import linear_search
+from sort.bubble_sort import bubble_sort
 from search.advanced_search import advanced_search
-
-# Import sort functions  
-exec(open(os.path.join('sort', 'bubble-sort.py')).read())
 from sort.shuffle_sort import fisher_yates_shuffle 
 
-# Inicializa a Hash Table com índice de músicas
 musica_hash_table = HashTable(size=100)
 for i, musica in enumerate(musicas_para_projeto):
-    # Normaliza o nome da música para a chave
     if isinstance(musica, dict):
         chave = musica['nome'].lower().strip()
         musica_hash_table.set(chave, (i, musica))
@@ -34,24 +25,19 @@ for i, musica in enumerate(musicas_para_projeto):
         }
         musica_hash_table.set(chave, (i, musica_dict))
 
-# Inicializa a fila de reprodução (Queue)
 music_queue = Queue()
 
-# Inicializa a pilha de músicas puladas (Stack)
 skipped_stack = Stack()
 
 @app.before_request
 def init_session():
-    # Sessão agora apenas marca que está inicializada
     if 'queue_initialized' not in session:
         session['queue_initialized'] = True
 
 @app.route("/")
 def home():
-    # Converte a fila para array para exibir
     playlist = music_queue.to_array() if hasattr(music_queue, 'to_array') else []
-    
-    # Converte objetos/dicts para dicts se necessário
+
     recomendadas = []
     for musica in musicas_para_projeto[10:15]:
         if isinstance(musica, dict):
@@ -77,7 +63,6 @@ def buscar_musica(termo):
     global music_queue
     termo = termo.strip()
     
-    # Primeiro tenta busca exata na Hash Table
     resultado = musica_hash_table.get(termo.lower())
     if resultado:
         indice, musica = resultado
@@ -88,10 +73,8 @@ def buscar_musica(termo):
         music_queue.enqueue(musica_dict)
         return redirect(url_for('home'))
     
-    # Usa busca avançada (nome, artista, gênero)
     indices = advanced_search(musicas_para_projeto, termo)
     
-    # Adiciona as primeiras 3 músicas encontradas
     for i, indice in enumerate(indices[:3]):
         musica = musicas_para_projeto[indice]
         musica_dict = musica if isinstance(musica, dict) else {
@@ -116,7 +99,6 @@ def adicionar_musica(musica_id):
         if 0 <= musica_id < len(musicas_para_projeto):
             musica = musicas_para_projeto[musica_id]
             
-            # Converte para dict se for objeto
             if isinstance(musica, dict):
                 musica_dict = musica
             else:
@@ -144,7 +126,6 @@ def pular_musica():
     global music_queue, skipped_stack
     print(f"\n=== PULAR MÚSICA ===")
     
-    # Remove a primeira música da fila (dequeue) e adiciona à pilha
     if not music_queue.is_empty():
         musica_pulada = music_queue.dequeue()
         skipped_stack.push(musica_pulada)
@@ -161,26 +142,18 @@ def voltar_musica():
     print(f"\n=== VOLTAR MÚSICA (Debug Mode) ===")
     
     try:
-        # 1. Verifica a Pilha
         if skipped_stack.is_empty():
             print(f"✗ Pilha vazia, nada para voltar.")
             return redirect(url_for('home'))
 
-        # 2. Tenta tirar da Pilha (Se a Stack tiver erro, vai estourar aqui)
         musica_anterior = skipped_stack.pop()
         print(f"✓ Música recuperada da pilha: {musica_anterior['nome'] if isinstance(musica_anterior, dict) else musica_anterior.nome}")
         
-        # 3. Faz o Backup da Fila atual
-        # Como vimos que sua classe Queue TEM to_array, podemos usar com segurança!
         items_na_fila = music_queue.to_array()
         print(f"✓ Backup da fila feito. {len(items_na_fila)} itens salvos.")
+
+        music_queue.clear()
         
-        # 4. Limpa a Fila
-        music_queue.clear() # Se sua classe Queue tiver clear(), use. Se não, use o loop abaixo:
-        # while not music_queue.is_empty():
-        #     music_queue.dequeue()
-        
-        # 5. Reconstrói: Primeiro a antiga, depois o resto
         music_queue.enqueue(musica_anterior)
         for musica in items_na_fila:
             music_queue.enqueue(musica)
@@ -189,26 +162,21 @@ def voltar_musica():
         return redirect(url_for('home'))
 
     except Exception as e:
-        # AQUI ESTÁ O SEGREDO: Em vez de Tela de Erro 500, ele imprime o erro no terminal
-        print("🔴 ERRO GRAVE NO /VOLTAR:")
+        print("ERRO GRAVE NO /VOLTAR:")
         print(traceback.format_exc())
         return "Erro interno no servidor (veja o terminal)", 500
 
 @app.route("/shuffle", methods=['POST'])
 def shuffle_playlist():
-    """Embaralha a fila usando algoritmo de ordenação"""
     global music_queue
     
     if music_queue.is_empty():
         return redirect(url_for('home'))
     
-    # Converte fila para array
     items = music_queue.to_array()
     
-    # Embaralha usando Fisher-Yates shuffle
     shuffled_items = fisher_yates_shuffle(items)
-    
-    # Reconstrói a fila
+
     music_queue.clear()
     for item in shuffled_items:
         music_queue.enqueue(item)

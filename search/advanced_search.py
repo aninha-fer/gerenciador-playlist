@@ -4,8 +4,8 @@ import os
 current_dir = os.path.dirname(__file__)
 
 # Execute the search files
-exec(open(os.path.join(current_dir, 'linear-search.py')).read())
-exec(open(os.path.join(current_dir, 'binary-search.py')).read())
+from search.linear_search import linear_search
+from search.binary_search import binary_search
 
 def search_music_by_name(musicas, termo):
     """Busca música por nome usando busca linear"""
